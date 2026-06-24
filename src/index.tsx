@@ -4,7 +4,6 @@ import { createRoot } from "@opentui/react";
 import React, { useState, useEffect } from 'react';
 import { useKeyboard } from '@opentui/react';
 
-// --- IMPORT KOMPONEN MODULAR ---
 import { BASE_URL } from './services/api';
 import { LoginScreen } from './components/LoginScreen';
 import { Header } from './components/Header';
@@ -132,11 +131,11 @@ const ApotekApp = () => {
     } else if (key.name === 'down') {
       setActiveIndex((prev) => (prev < (queueData.length > 0 ? queueData.length - 1 : 0) ? prev + 1 : prev));
     } 
+    // PERUBAHAN: Siklus langsung dari Menunggu -> Dipanggil
     else if (key.name === 'return' || key.name === 'enter') {
       const current = queueData[activeIndex];
       if (current) {
-        if (current.status === "Meracik") updateStatusOnly(current.name, "Dipanggil");
-        else if (current.status === "Menunggu") updateStatusOnly(current.name, "Dipanggil"); 
+        if (current.status === "Menunggu") updateStatusOnly(current.name, "Dipanggil"); 
         else setActionMsg("Obat sudah siap/diambil. Tekan 'S' jika sudah selesai diserahkan.");
       }
     } else if (key.name === 's') {
@@ -145,7 +144,6 @@ const ApotekApp = () => {
         updateStatusOnly(current.name, "Selesai");
       }
     }
-    // Blok logika untuk tombol D sudah dihapus sepenuhnya
   });
 
   if (!isLoggedIn) {
@@ -188,7 +186,8 @@ const ApotekApp = () => {
             const teksAtas = String(`${nama} - ${pasien}`);
             const teksBawah = String(`Status: ${status}  |  Dari: ${rujukan}`);
 
-            let statusColor = "cyan"; 
+            // PERUBAHAN: Status Menunggu menjadi warna abu-abu default
+            let statusColor = "gray"; 
             if (status === "Dipanggil") statusColor = "yellow";
 
             return (
