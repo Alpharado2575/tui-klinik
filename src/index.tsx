@@ -164,9 +164,9 @@ const ApotekApp = () => {
   const visibleQueue = queueData.slice(startIndex, startIndex + MAX_VISIBLE);
 
   return (
-    <box width="100%" height="100%" flexDirection="column" borderStyle="round" borderColor="magenta" paddingX={2} paddingY={0}>
+    <box width="100%" height="100%" flexDirection="column" borderStyle="round" borderColor="green" paddingX={2} paddingY={0}>
       
-      <Header title="ANTREAN LOKET PENYERAHAN OBAT" color="magenta" />
+      <Header title="ANTREAN LOKET PENYERAHAN OBAT" color="green" />
 
       <box marginTop={1} flexDirection="column" height={15}>
         {isFetching ? (
@@ -193,11 +193,11 @@ const ApotekApp = () => {
             return (
               <box key={nama} flexDirection="row" width="100%" height={2} marginBottom={1}>
                 <box width={4} height={2}>
-                  <text color={isSelected ? "magenta" : "gray"} bold={isSelected} children={isSelected ? " > " : "   "} />
+                  <text color={isSelected ? "green" : "gray"} bold={isSelected} children={isSelected ? " > " : "   "} />
                 </box>
                 <box flexDirection="column" width="100%" height={2}>
                   <box width="100%" height={1}>
-                    <text color={isSelected ? "magenta" : "white"} bold={true} children={teksAtas} />
+                    <text color={isSelected ? "green" : "white"} bold={true} children={teksAtas} />
                   </box>
                   <box width="100%" height={1}>
                     <text color={statusColor} children={teksBawah} />
