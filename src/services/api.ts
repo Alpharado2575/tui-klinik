@@ -39,7 +39,15 @@ export const api = {
         return true;
     },
 
-    createPatient: async (patientName: string, sessionCookie: string) => {
+    checkPatientExists: async (patientName: string, sessionCookie: string) => {
+        const res = await fetch(`${BASE_URL}/api/resource/Patient/${patientName}`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json', 'Cookie': sessionCookie }
+        });
+        return res.ok;
+    },
+
+    createPatient: async (patientName: string, sex: string, sessionCookie: string) => {
         const nameParts = patientName.trim().split(' ');
         const firstName = nameParts[0];
         const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
@@ -50,7 +58,7 @@ export const api = {
             body: JSON.stringify({
                 first_name: firstName,
                 last_name: lastName,
-                sex: "Male",
+                sex: sex,
                 status: "Active"
             })
         });
@@ -58,7 +66,7 @@ export const api = {
         return true;
     },
 
-    createRegistration: async (patientName: string, queueType: string, destination: string, sessionCookie: string) => {
+    createRegistration: async (patientName: string, sex: string | null, queueType: string, destination: string, sessionCookie: string) => {
         const now = new Date();
         const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:00`;
 
@@ -78,17 +86,20 @@ export const api = {
         });
 
         if (!res.ok) {
-            // Patient might not exist, create patient then retry
-            await api.createPatient(patientName, sessionCookie);
+            if (sex) {
+                await api.createPatient(patientName, sex, sessionCookie);
 
-            res = await fetch(`${BASE_URL}/api/resource/Registration Queue Ticket`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Cookie': sessionCookie },
-                body: JSON.stringify(ticketPayload)
-            });
+                res = await fetch(`${BASE_URL}/api/resource/Registration Queue Ticket`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Cookie': sessionCookie },
+                    body: JSON.stringify(ticketPayload)
+                });
 
-            if (!res.ok) {
-                throw new Error("Gagal membuat antrean meskipun pasien sudah didaftarkan.");
+                if (!res.ok) {
+                    throw new Error("Gagal membuat antrean meskipun pasien sudah didaftarkan.");
+                }
+            } else {
+                throw new Error("Pasien belum terdaftar dan data kelamin tidak tersedia.");
             }
         }
         return true;

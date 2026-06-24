@@ -8,8 +8,8 @@ import { QueueScreen } from './components/QueueScreen.js';
 
 const PendaftaranApp = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [sessionCookie, setSessionCookie] = useState(''); 
-  
+  const [sessionCookie, setSessionCookie] = useState('');
+
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -53,9 +53,9 @@ const PendaftaranApp = () => {
       setActionMsg(`Memproses: ${ticketId}...`);
       await api.updateStatus(ticketId, newStatus, sessionCookie);
       setActionMsg(`Sukses! ${ticketId} -> ${newStatus}`);
-      setQueueData(prev => 
-        newStatus === 'Selesai' 
-          ? prev.filter(t => t.name !== ticketId) 
+      setQueueData(prev =>
+        newStatus === 'Selesai'
+          ? prev.filter(t => t.name !== ticketId)
           : prev.map(t => t.name === ticketId ? { ...t, status: newStatus } : t)
       );
     } catch (err) {
@@ -64,10 +64,10 @@ const PendaftaranApp = () => {
     setTimeout(() => setActionMsg(''), 3000);
   };
 
-  const handleCreateRegistration = async (patientName: string, queueType: string, destination: string) => {
+  const handleCreateRegistration = async (patientName: string, sex: string | null, queueType: string, destination: string) => {
     try {
       setActionMsg(`Memproses antrean untuk ${patientName}...`);
-      await api.createRegistration(patientName, queueType, destination, sessionCookie);
+      await api.createRegistration(patientName, sex, queueType, destination, sessionCookie);
       setActionMsg(`Berhasil! ${patientName} masuk antrean ${destination}.`);
       fetchQueue();
     } catch (err: any) {
@@ -76,23 +76,28 @@ const PendaftaranApp = () => {
     setTimeout(() => setActionMsg(''), 4000);
   };
 
+  const handleCheckPatient = async (patientName: string) => {
+    return await api.checkPatientExists(patientName, sessionCookie);
+  };
+
   if (!isLoggedIn) {
     return (
-      <LoginScreen 
-        onLogin={handleLogin} 
-        loading={loading} 
-        errorMsg={errorMsg} 
+      <LoginScreen
+        onLogin={handleLogin}
+        loading={loading}
+        errorMsg={errorMsg}
       />
     );
   }
 
   return (
-    <QueueScreen 
+    <QueueScreen
       queueData={queueData}
       baseUrl={BASE_URL}
       actionMsg={actionMsg}
       onUpdateStatus={handleUpdateStatus}
       onCreateRegistration={handleCreateRegistration}
+      onCheckPatientExists={handleCheckPatient}
       onRefresh={fetchQueue}
       onShowError={(msg) => { setActionMsg(msg); setTimeout(() => setActionMsg(''), 3000); }}
     />
