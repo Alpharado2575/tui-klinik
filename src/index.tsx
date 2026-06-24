@@ -63,7 +63,6 @@ const ApotekApp = () => {
         setActionMsg(`Frappe Error: ${jsonApotek.exception || resApotek.statusText}`);
         setQueueData([]);
       } else if (jsonApotek.data) {
-        // LOGIKA BARU: Buang semua tiket yang statusnya "Selesai" sebelum dimasukkan ke layar
         const activeQueue = jsonApotek.data.filter((t: any) => t.status !== "Selesai");
         setQueueData(activeQueue);
       } else {
@@ -103,11 +102,9 @@ const ApotekApp = () => {
       if (res.ok) {
         setActionMsg(`Sukses! Obat pasien menjadi: ${newStatus}.`);
         
-        // LOGIKA BARU: Jika statusnya Selesai, langsung hilangkan dari layar
         if (newStatus === "Selesai") {
           setQueueData(prev => {
             const filteredData = prev.filter(t => t.name !== ticketId);
-            // Koreksi posisi panah kursor agar tidak error/out-of-bounds
             setActiveIndex(currIdx => currIdx >= filteredData.length ? Math.max(0, filteredData.length - 1) : currIdx);
             return filteredData;
           });
@@ -134,11 +131,12 @@ const ApotekApp = () => {
       setActiveIndex((prev) => (prev > 0 ? prev - 1 : prev));
     } else if (key.name === 'down') {
       setActiveIndex((prev) => (prev < (queueData.length > 0 ? queueData.length - 1 : 0) ? prev + 1 : prev));
-    } else if (key.name === 'return' || key.name === 'enter') {
+    } 
+    else if (key.name === 'return' || key.name === 'enter') {
       const current = queueData[activeIndex];
       if (current) {
-        if (current.status === "Menunggu") updateStatusOnly(current.name, "Meracik");
-        else if (current.status === "Meracik") updateStatusOnly(current.name, "Dipanggil");
+        if (current.status === "Meracik") updateStatusOnly(current.name, "Dipanggil");
+        else if (current.status === "Menunggu") updateStatusOnly(current.name, "Dipanggil"); 
         else setActionMsg("Obat sudah siap/diambil. Tekan 'S' jika sudah selesai diserahkan.");
       }
     } else if (key.name === 's') {
@@ -146,12 +144,8 @@ const ApotekApp = () => {
       if (current && current.status !== "Selesai") {
         updateStatusOnly(current.name, "Selesai");
       }
-    } else if (key.name === 'd') {
-      const current = queueData[activeIndex];
-      if (current) {
-        setActionMsg(`DEBUG RAW: ${JSON.stringify(current).slice(0, 75)}...`);
-      }
     }
+    // Blok logika untuk tombol D sudah dihapus sepenuhnya
   });
 
   if (!isLoggedIn) {
@@ -194,8 +188,7 @@ const ApotekApp = () => {
             const teksAtas = String(`${nama} - ${pasien}`);
             const teksBawah = String(`Status: ${status}  |  Dari: ${rujukan}`);
 
-            let statusColor = "gray"; 
-            if (status === "Meracik") statusColor = "cyan";
+            let statusColor = "cyan"; 
             if (status === "Dipanggil") statusColor = "yellow";
 
             return (
@@ -218,16 +211,14 @@ const ApotekApp = () => {
       </box>
 
       <box width="100%" height={1}>
-        <text color={actionMsg.includes('Gagal') || actionMsg.includes('Error') || actionMsg.includes('DEBUG') ? "red" : "green"} bold={true} children={(actionMsg || ' ').padEnd(80, ' ')} />
+        <text color={actionMsg.includes('Gagal') || actionMsg.includes('Error') ? "red" : "green"} bold={true} children={(actionMsg || ' ').padEnd(80, ' ')} />
       </box>
 
       <box height={1}><text color="gray" children={dividerLine} /></box>
       
-      {/* Teks Footer sudah dipersingkat agar tidak terpotong mesin Layout terminal */}
       <box width="100%" flexDirection="row" height={1}>
-        <box width={25}><text color="cyan" children="[ENTER] Panggil" /></box>
-        <box width={30}><text color="green" children="[S] Selesai (Diserahkan)" /></box>
-        <box width={15}><text color="gray" children="[D] Debug" /></box>
+        <box width={40}><text color="cyan" children="[ENTER] Panggil Pasien" /></box>
+        <box width={40}><text color="green" children="[S] Selesai (Diserahkan)" /></box>
       </box>
 
     </box>
