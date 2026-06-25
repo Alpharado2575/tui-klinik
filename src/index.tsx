@@ -53,11 +53,16 @@ const PendaftaranApp = () => {
       setActionMsg(`Memproses: ${ticketId}...`);
       await api.updateStatus(ticketId, newStatus, sessionCookie);
       setActionMsg(`Sukses! ${ticketId} -> ${newStatus}`);
+      
+      // Update locally for instant feedback
       setQueueData(prev =>
         newStatus === 'Selesai'
           ? prev.filter(t => t.name !== ticketId)
           : prev.map(t => t.name === ticketId ? { ...t, status: newStatus } : t)
       );
+
+      // Force fetch to catch backend auto-call logic immediately
+      fetchQueue();
     } catch (err) {
       setActionMsg("Error koneksi saat update status.");
     }
