@@ -1,1 +1,1 @@
-export const BASE_URL = "https://unclasp-grab-enamel.ngrok-free.dev";
+export const BASE_URL = process.env.BASE_URL
