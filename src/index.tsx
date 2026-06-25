@@ -135,13 +135,13 @@ const ApotekApp = () => {
     else if (key.name === 'return' || key.name === 'enter') {
       const current = queueData[activeIndex];
       if (current) {
-        if (current.status === "Menunggu") updateStatusOnly(current.name, "Dipanggil"); 
-        else setActionMsg("Obat sudah siap/diambil. Tekan 'S' jika sudah selesai diserahkan.");
-      }
-    } else if (key.name === 's') {
-      const current = queueData[activeIndex];
-      if (current && current.status !== "Selesai") {
-        updateStatusOnly(current.name, "Selesai");
+        if (current.status === "Menunggu") {
+          updateStatusOnly(current.name, "Dipanggil"); 
+        } else if (current.status === "Dipanggil") {
+          updateStatusOnly(current.name, "Selesai");
+        } else {
+          updateStatusOnly(current.name, "Dipanggil");
+        }
       }
     }
   });
@@ -216,8 +216,7 @@ const ApotekApp = () => {
       <box height={1}><text color="gray" children={dividerLine} /></box>
       
       <box width="100%" flexDirection="row" height={1}>
-        <box width={40}><text color="cyan" children="[ENTER] Panggil Pasien" /></box>
-        <box width={40}><text color="green" children="[S] Selesai (Diserahkan)" /></box>
+        <box width={40}><text color="cyan" children="[ENTER] Panggil/Selesai" /></box>
       </box>
 
     </box>
