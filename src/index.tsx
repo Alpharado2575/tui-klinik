@@ -74,6 +74,8 @@ const PoliApp = () => {
           ? prev.filter(t => t.name !== ticketId) 
           : prev.map(t => t.name === ticketId ? { ...t, ...payload } : t)
       );
+      // Force fetch to catch backend auto-call cascade immediately
+      fetchAllData();
     } catch (err) {
       setActionMsg("Gagal Update Status.");
     }
