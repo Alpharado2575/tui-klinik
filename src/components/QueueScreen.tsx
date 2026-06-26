@@ -93,19 +93,19 @@ export const QueueScreen: React.FC<QueueScreenProps> = ({
             height="100%"
             flexDirection="column"
             borderStyle="round"
-            borderColor="green"
+            borderColor="orange"
             paddingX={2}
             paddingY={0}
         >
             {/* Header */}
             <box width="100%" flexDirection="row" justifyContent="space-between" height={1}>
-                <text bold={true} color="greenBright" children="ANTREAN POLI KLINIK" />
+                <text bold={true} color="orangeBright" children="ANTREAN POLI KLINIK" />
                 <box flexDirection="row">
                     <text color="cyan" children={`Sesi Aktif | `} />
                     <text color="white" bold={true} children={baseUrl.split('//')[1]?.split('.')[0] || baseUrl} />
                 </box>
             </box>
-            <box height={1}><text color="green" children={dividerLine} /></box>
+            <box height={1}><text color="orange" children={dividerLine} /></box>
 
             {/* Main List Area */}
             <box marginTop={1} flexDirection="column" height={15}>
@@ -132,11 +132,11 @@ export const QueueScreen: React.FC<QueueScreenProps> = ({
             </box>
 
             {/* Footer / Shortcut Keys */}
-            <box height={1}><text color="green" children={dividerLine} /></box>
+            <box height={1}><text color="orange" children={dividerLine} /></box>
 
             {updateStep === 0 && (
                 <box width="100%" flexDirection="row" height={1} justifyContent="space-between">
-                    <box flexDirection="row"><text color="greenBright" children="[ENTER]" /><text color="white" children=" Panggil/Periksa/Selesai" /></box>
+                    <box flexDirection="row"><text color="orangeBright" children="[ENTER]" /><text color="white" children=" Panggil/Periksa/Selesai" /></box>
                     <box flexDirection="row"><text color="yellowBright" children="[R]" /><text color="white" children=" Refresh" /></box>
                 </box>
             )}

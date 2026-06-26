@@ -19,7 +19,7 @@ export const QueueItem: React.FC<QueueItemProps> = ({ tiket, isSelected }) => {
         <box flexDirection="row" width="100%" height={2} marginBottom={1}>
             <box width={4} height={2} alignItems="flex-start" justifyContent="center">
                 <text
-                    color={isSelected ? "greenBright" : "gray"}
+                    color={isSelected ? "orangeBright" : "gray"}
                     bold={isSelected}
                     children={isSelected ? " 🢂 " : "   "}
                 />
@@ -31,11 +31,11 @@ export const QueueItem: React.FC<QueueItemProps> = ({ tiket, isSelected }) => {
                 paddingLeft={1}
             >
                 <box width="100%" height={1}>
-                    <text color={isSelected ? "greenBright" : "cyan"} bold={isSelected} children={teksAtas} />
+                    <text color={isSelected ? "orangeBright" : "cyan"} bold={isSelected} children={teksAtas} />
                 </box>
                 <box width="100%" height={1}>
                     <text
-                        color={status === "Selesai" ? "green" : (status === "Dipanggil" || status === "Diperiksa" ? "yellow" : "gray")}
+                        color={status === "Selesai" ? "orange" : (status === "Dipanggil" || status === "Diperiksa" ? "yellow" : "gray")}
                         italic={!isSelected}
                         children={teksBawah}
                     />
