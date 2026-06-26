@@ -35,7 +35,7 @@ export const QueueScreen: React.FC<QueueScreenProps> = ({
     const [newTypeIdx, setNewTypeIdx] = useState(0);
     const typeOptions = ["Pasien Baru", "Pasien Lama", "Prioritas"];
     const [newClinicIdx, setNewClinicIdx] = useState(0);
-    const clinicOptions = ["Poli Anak", "Poli Gigi", "Poli THT", "Poli Umum"];
+    const clinicOptions = ["Poli Anak", "Poli Gigi", "Poli THT", "Poli Umum", "Poli Penyakit Dalam"];
 
     // Auto scroll to bottom on first load
     useEffect(() => {
