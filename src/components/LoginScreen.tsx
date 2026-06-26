@@ -34,12 +34,12 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin, loading, erro
                 alignItems="center"
                 justifyContent="center"
                 borderStyle="double"
-                borderColor="green"
+                borderColor="blue"
                 paddingX={4}
                 paddingY={1}
             >
-                <text color="green" bold={true} children="KLINIK SATUSEHAT - ANTREAN OBAT" />
-                <box height={1} marginBottom={2}><text color="green" children="══════════════════════════════════════" /></box>
+                <text color="blue" bold={true} children="KLINIK SATUSEHAT - ANTREAN OBAT" />
+                <box height={1} marginBottom={2}><text color="blue" children="══════════════════════════════════════" /></box>
 
                 <box width="100%" flexDirection="row" justifyContent="center">
                     <box width={15}><text children="Username" /></box>

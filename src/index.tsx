@@ -12,17 +12,17 @@ const ApotekApp = () => {
   const [username] = useState('Administrator');
   const [password] = useState('1212');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [sessionCookie, setSessionCookie] = useState(''); 
-  
+  const [sessionCookie, setSessionCookie] = useState('');
+
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
   const [queueData, setQueueData] = useState<any[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [actionMsg, setActionMsg] = useState('');
-  
+
   const [isFirstLoad, setIsFirstLoad] = useState(true);
-  const [isFetching, setIsFetching] = useState(true); 
+  const [isFetching, setIsFetching] = useState(true);
 
   const handleLogin = async () => {
     setLoading(true);
@@ -57,7 +57,7 @@ const ApotekApp = () => {
         headers: { 'Content-Type': 'application/json', 'Cookie': sessionCookie }
       });
       const jsonApotek = await resApotek.json();
-      
+
       if (!resApotek.ok) {
         setActionMsg(`Frappe Error: ${jsonApotek.exception || resApotek.statusText}`);
         setQueueData([]);
@@ -97,10 +97,10 @@ const ApotekApp = () => {
         headers: { 'Content-Type': 'application/json', 'Cookie': sessionCookie },
         body: JSON.stringify({ status: newStatus })
       });
-      
+
       if (res.ok) {
         setActionMsg(`Sukses! Obat pasien menjadi: ${newStatus}.`);
-        
+
         if (newStatus === "Selesai") {
           setQueueData(prev => {
             const filteredData = prev.filter(t => t.name !== ticketId);
@@ -123,20 +123,20 @@ const ApotekApp = () => {
   useKeyboard((key: any) => {
     if (!isLoggedIn) {
       if (key.name === 'return' || key.name === 'enter') handleLogin();
-      return; 
+      return;
     }
 
     if (key.name === 'up') {
       setActiveIndex((prev) => (prev > 0 ? prev - 1 : prev));
     } else if (key.name === 'down') {
       setActiveIndex((prev) => (prev < (queueData.length > 0 ? queueData.length - 1 : 0) ? prev + 1 : prev));
-    } 
+    }
     // PERUBAHAN: Siklus langsung dari Menunggu -> Dipanggil
     else if (key.name === 'return' || key.name === 'enter') {
       const current = queueData[activeIndex];
       if (current) {
         if (current.status === "Menunggu") {
-          updateStatusOnly(current.name, "Dipanggil"); 
+          updateStatusOnly(current.name, "Dipanggil");
         } else if (current.status === "Dipanggil") {
           updateStatusOnly(current.name, "Selesai");
         } else {
@@ -148,11 +148,11 @@ const ApotekApp = () => {
 
   if (!isLoggedIn) {
     return (
-      <LoginScreen 
-        title="LOKET PENYERAHAN OBAT (FARMASI)" 
-        username={username} 
-        errorMsg={errorMsg} 
-        loading={loading} 
+      <LoginScreen
+        title="LOKET PENYERAHAN OBAT (FARMASI)"
+        username={username}
+        errorMsg={errorMsg}
+        loading={loading}
       />
     );
   }
@@ -164,9 +164,9 @@ const ApotekApp = () => {
   const visibleQueue = queueData.slice(startIndex, startIndex + MAX_VISIBLE);
 
   return (
-    <box width="100%" height="100%" flexDirection="column" borderStyle="round" borderColor="green" paddingX={2} paddingY={0}>
-      
-      <Header title="ANTREAN LOKET PENYERAHAN OBAT" color="green" />
+    <box width="100%" height="100%" flexDirection="column" borderStyle="round" borderColor="blue" paddingX={2} paddingY={0}>
+
+      <Header title="ANTREAN LOKET PENYERAHAN OBAT" color="blue" />
 
       <box marginTop={1} flexDirection="column" height={15}>
         {isFetching ? (
@@ -177,7 +177,7 @@ const ApotekApp = () => {
           visibleQueue.map((tiket, index) => {
             const realIndex = startIndex + index;
             const isSelected = realIndex === activeIndex;
-            
+
             const nama = tiket.name || 'N/A';
             const pasien = tiket.patient || tiket.patient_name || tiket.customer || 'Tanpa Nama';
             const status = tiket.status || '-';
@@ -187,17 +187,17 @@ const ApotekApp = () => {
             const teksBawah = String(`Status: ${status}  |  Dari: ${rujukan}`);
 
             // PERUBAHAN: Status Menunggu menjadi warna abu-abu default
-            let statusColor = "gray"; 
+            let statusColor = "gray";
             if (status === "Dipanggil") statusColor = "yellow";
 
             return (
               <box key={nama} flexDirection="row" width="100%" height={2} marginBottom={1}>
                 <box width={4} height={2}>
-                  <text color={isSelected ? "green" : "gray"} bold={isSelected} children={isSelected ? " > " : "   "} />
+                  <text color={isSelected ? "blue" : "gray"} bold={isSelected} children={isSelected ? " > " : "   "} />
                 </box>
                 <box flexDirection="column" width="100%" height={2}>
                   <box width="100%" height={1}>
-                    <text color={isSelected ? "green" : "white"} bold={true} children={teksAtas} />
+                    <text color={isSelected ? "blue" : "white"} bold={true} children={teksAtas} />
                   </box>
                   <box width="100%" height={1}>
                     <text color={statusColor} children={teksBawah} />
@@ -210,11 +210,11 @@ const ApotekApp = () => {
       </box>
 
       <box width="100%" height={1}>
-        <text color={actionMsg.includes('Gagal') || actionMsg.includes('Error') ? "red" : "green"} bold={true} children={(actionMsg || ' ').padEnd(80, ' ')} />
+        <text color={actionMsg.includes('Gagal') || actionMsg.includes('Error') ? "red" : "blue"} bold={true} children={(actionMsg || ' ').padEnd(80, ' ')} />
       </box>
 
       <box height={1}><text color="gray" children={dividerLine} /></box>
-      
+
       <box width="100%" flexDirection="row" height={1}>
         <box width={40}><text color="cyan" children="[ENTER] Panggil/Selesai" /></box>
       </box>
